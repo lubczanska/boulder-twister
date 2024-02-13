@@ -1,58 +1,80 @@
-import React, { useState } from 'react'
-import './App.css'
-import { Color, Limb } from './types';
-
-
-
+import React, { useEffect, useState } from "react";
+import "./App.css";
+import { Color, Game, Limb } from "./types";
+import NewGame from "./components/NewGame";
+import Play from "./components/Play";
 
 function App() {
-  const [colors, setColors] = useState<Array<Color>>([]);
-  const [limbs, setLimbs] = useState<Array<Limb>>([Limb.RightArm, Limb.LeftArm, Limb.RightLeg, Limb.LeftLeg]);
-  const [rolled, setRolled] = useState<Color>(Color.Red);
+  const [game, setGame] = useState<Game | null>(null);
+  const [showNew, setShowNew] = useState(false);
+  const [showPlay, setShowPlay] = useState(false);
 
-  const addColor = (color: Color) => {
-    setColors([...colors, color]);
+  useEffect(() => {
+    const savedGame = localStorage.getItem("game");
+    if (savedGame) {
+      setGame(JSON.parse(savedGame));
+    }
+  }, []);
+
+  const saveGame = async (newGame: Game) => {
+    await setGame(newGame);
+    localStorage.setItem("game", JSON.stringify(newGame));
   };
-
-  const addLimb = (limb: Limb) => {
-    setLimbs([...limbs, limb]);
+  const onSubmit = async (colors: Color[], limbs: Limb[]) => {
+    await setGame({ colors: colors, limbs: limbs, highscore: 0 });
+    setShowNew(false);
+    if (game) {
+      localStorage.setItem("game", JSON.stringify(game));
+      console.log(game);
+    }
   };
-
-  const deleteColor= (color: Color) => {
-    const colorIdx = colors.indexOf(color);
-    const updatedColors = [...colors];
-    updatedColors.splice(colorIdx,1);
-    setColors(updatedColors);
-  }
-
-  const deleteLimb = (limb: Limb) => {
-    const limbIdx = limbs.indexOf(limb);
-    const updatedLimbs = [...limbs];
-    updatedLimbs.splice(limbIdx,1);
-    setLimbs(updatedLimbs);
-  }
-
-  const roll = () => {
-    const color = colors[Math.floor(Math.random()*colors.length)];
-    const limb  = colors[Math.floor(Math.random()*limbs.length)];
-    
-    setRolled(color);
-  }
 
   return (
     <React.Fragment>
-      <header>
-        <h1>Wspinaczkowy Twister</h1>
-      </header>
+      {!showNew && !showPlay && (
+        <header className="py-40 text-2xl">
+          <h1 className="">Climbing Twister</h1>
+        </header>
+      )}
       <main>
-        <section>
-          <h2>{rolled}</h2>
-          <button onClick={() => roll()}>Zakręć</button>
-          <img src=''></img>
-        </section>
+        {showNew && (
+          <NewGame onSubmit={onSubmit} onClose={() => setShowNew(false)} />
+        )}
+        {showPlay && game && (
+          <Play
+            game={game}
+            onClose={(game) => {
+              setShowPlay(false);
+              saveGame(game);
+            }}
+          />
+        )}
+        {!showPlay && !showNew && (
+          <div className="w-full  flex flex-col gap-4 items-center justify-center">
+            {game && (
+              <div>
+                <button
+                  className="btn btn-secondary"
+                  onClick={() => {
+                    setShowPlay(true);
+                    console.log(game);
+                  }}
+                >
+                  CONTINUE
+                </button>
+              </div>
+            )}
+            <button
+              className="btn btn-secondary"
+              onClick={() => setShowNew(true)}
+            >
+              NEW GAME
+            </button>
+          </div>
+        )}
       </main>
     </React.Fragment>
-  )
+  );
 }
 
-export default App
+export default App;
