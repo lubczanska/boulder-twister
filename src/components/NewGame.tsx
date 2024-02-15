@@ -1,5 +1,9 @@
 import { useRef, useState } from "react";
-import { baseColors, Color, Limb, limbs, prettyPrint } from "../types";
+import { baseColors, Color, Limb, limbs, limbSvgs } from "../util/types";
+import { prettyPrint } from "../util/print";
+
+
+import Button from "./Button";
 
 interface NewGameProps {
   onSubmit: (colors: Color[], limbs: Limb[]) => void;
@@ -10,7 +14,7 @@ interface FormElements extends HTMLFormControlsCollection {
   name: HTMLInputElement;
   value: HTMLInputElement;
 }
-interface AddColorFormElement extends HTMLFormElement {
+export interface AddColorFormElement extends HTMLFormElement {
   readonly elements: FormElements;
 }
 
@@ -48,10 +52,14 @@ const NewGame = ({ onSubmit }: NewGameProps) => {
   };
 
   return (
-    <div className="w-2/3 mx-auto">
+    <div className="w-full px-5 mx-auto">
       {/* modal */}
-      <dialog id="show_expense_modal" className="modal" ref={addColorRef}>
-        <div className="modal-box">
+      <dialog
+        id="show_expense_modal"
+        className="bg-white border border-black p-10 pb-5"
+        ref={addColorRef}
+      >
+        <div className="">
           <form
             id="dialog"
             method="dialog"
@@ -60,20 +68,22 @@ const NewGame = ({ onSubmit }: NewGameProps) => {
           >
             <button
               type="button"
-              className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+              className="absolute right-3 top-3"
               onClick={() => {
                 if (addColorRef.current) addColorRef.current.close();
               }}
             >
               ✕
             </button>
-            <input
-              id="name"
-              className="input input-bordered"
-              placeholder="name"
-            />
-            <input id="value" type="color" />
-            <button className="btn">Add</button>
+            <div className="flex justify-between gap-2 items-center py-2">
+              <input id="name" className="border-none" placeholder="name" />
+              <input
+                id="value"
+                type="color"
+                className="rounded-full w-8 h-8 border border-black"
+              />
+            </div>
+            <button type="submit"> add </button>
           </form>
         </div>
       </dialog>
@@ -88,94 +98,89 @@ const NewGame = ({ onSubmit }: NewGameProps) => {
           if (newLimbs.length) {
             onSubmit(newColors, newLimbs);
           } else {
-            setError("No limbs selected :(");
+            setError("no limbs selected :(");
           }
         }}
       >
-        {error && <div>{error}</div>}
+        {error && (
+          <div className="pt-4">
+            <p className="mx-auto bg-red-400 font-bold w-fit px-1">{error}</p>
+          </div>
+        )}
         {next ? (
-          <div className="flex flex-col">
-            <label className="py-5 flex gap-1">
-              Which limbs do you want to use?
+          <div className="flex flex-col w-full h-full p-5 items-center gap-10">
+            <label className="mx-auto w-2/3 pt-5 pb-2 text-xl font-semibold">
+              which limbs do you want to use?
             </label>
-            {limbs.map((limb, index) => (
-              <a
-                key={index}
-                className=" basis-1/3"
-                onClick={() => handleCheck(index, "limb")}
-              >
-                {selectedLimb[index] ? (
-                  <div className="card bg-primary hover:bg-base-300">
-                    <div className="card-body">
-                      <p>{prettyPrint[limb]}</p>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="card hover:bg-base-300">
-                    <div className="card-body">
-                      <p>{prettyPrint[limb]}</p>
-                    </div>
-                  </div>
-                )}
-              </a>
-            ))}
+            <div className="flex flex-wrap items-center justify-center gap-3 basis-1 grow">
+              {limbs.map((limb, index) => (
+                <a
+                  key={index}
+                  className={
+                    "basis-1/3 grow border border-black  py-5 font-bold h-1/2 flex flex-col items-center justify-center gap-10 " +
+                    (selectedLimb[index]
+                      ? " bg-black text-white"
+                      : " bg-white text-black hover:bg-black hover:text-white")
+                  }
+                  onClick={() => handleCheck(index, "limb")}
+                >
+                  <p>{prettyPrint[limb]}</p>
+                  <img src={limbSvgs[limb]} alt="SVG" className={"w-20 " + (selectedLimb[index] ? "bg-white" : "")} />
+                </a>
+              ))}
+            </div>
             <button
               type="submit"
               form="gameForm"
-              className="btn btn-primary my-8"
+              className="border border-black text-black bg-white font-bold text-lg m-1 py-2 px-10 w-2/3 rounded-full hover:bg-black hover:text-white"
             >
-              START
+              {" "}
+              start{" "}
             </button>
           </div>
         ) : (
-          <div className="flex flex-col join join-vertical gap-4">
-            <label className="py-10 text-xl">
-              What colors can you see on the wall?
+          <div className="flex flex-col gap-3">
+            <label className="mx-auto w-2/3 pt-5 pb-2 text-xl font-semibold">
+              what colors can you see on the wall?
             </label>
             {colors.map((color, index) => (
               <div
                 key={index}
-                className="join-item flex justify-between items-center"
+                className="px-10 flex justify-between items-center"
               >
                 <input
-                  className="checkbox checkbox-primary"
+                  className="w-6 h-6 text-black bg-white border-black rounded-full"
                   type="checkbox"
                   defaultChecked={selected[index]}
                   onChange={() => handleCheck(index, "color")}
                 />
-                <p>
-                  {color.name} 
-                </p>
+                <p>{color.name}</p>
                 <div
-                  className="w-8 h-8 rounded-full"
+                  className="w-6 h-6 border-black border rounded-full"
                   style={{ backgroundColor: color.value }}
                 ></div>
               </div>
             ))}
-            <div className="form-actions">
-              <button
+            <div className="w-full pt-5">
+              <Button
                 type="button"
-                className="btn btn-outline"
                 onClick={() => {
                   if (addColorRef.current) addColorRef.current.showModal();
                 }}
-              >
-                Add color
-              </button>
-              <button
+                label="add color"
+              />
+              <Button
                 type="button"
-                className="btn btn-primary"
                 onClick={() => {
                   if (selected.filter((v) => v == true).length) {
                     setError(null);
                     setNext(true);
                   } else {
-                    setError("No colors selected :(");
+                    setError("no colors selected :(");
                   }
                 }}
-              >
-                NEXT
-              </button>
+                label="next"
+              />
             </div>
           </div>
         )}

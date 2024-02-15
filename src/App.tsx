@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
-import { Color, Game, Limb } from "./types";
+import { Color, Game, Language, Limb } from "./util/types";
+import { prettyLanguage } from "./util/print";
 import NewGame from "./components/NewGame";
 import Play from "./components/Play";
+import Button from "./components/Button";
 
 function App() {
   const [game, setGame] = useState<Game | null>(null);
   const [showNew, setShowNew] = useState(false);
   const [showPlay, setShowPlay] = useState(false);
+  const [language, setLanguage] = useState<Language>(Language.en);
 
   useEffect(() => {
     const savedGame = localStorage.getItem("game");
@@ -20,25 +23,32 @@ function App() {
     await setGame(newGame);
     localStorage.setItem("game", JSON.stringify(newGame));
   };
+
   const onSubmit = async (colors: Color[], limbs: Limb[]) => {
     await setGame({ colors: colors, limbs: limbs, highscore: 0 });
     setShowNew(false);
     if (game) {
       localStorage.setItem("game", JSON.stringify(game));
       console.log(game);
+      setShowPlay(true);
     }
   };
 
   return (
     <React.Fragment>
       {!showNew && !showPlay && (
-        <header className="py-40 text-2xl">
-          <h1 className="">Climbing Twister</h1>
+        <header className="py-40 text-4xl font-bold">
+          <h1 className="">boulder twister</h1>
         </header>
       )}
-      <main>
+      <main className="h-screen">
         {showNew && (
-          <NewGame onSubmit={onSubmit} onClose={() => setShowNew(false)} />
+          <NewGame
+            onSubmit={onSubmit}
+            onClose={() => {
+              setShowNew(false);
+            }}
+          />
         )}
         {showPlay && game && (
           <Play
@@ -51,24 +61,29 @@ function App() {
         )}
         {!showPlay && !showNew && (
           <div className="w-full  flex flex-col gap-4 items-center justify-center">
-            {game && (
-              <div>
-                <button
-                  className="btn btn-secondary"
-                  onClick={() => {
-                    setShowPlay(true);
-                    console.log(game);
-                  }}
-                >
-                  CONTINUE
-                </button>
-              </div>
-            )}
+            <div className="w-full basis-1 grow">
+              {game && (
+                <div className="w-full">
+                  <Button
+                    onClick={() => {
+                      setShowPlay(true);
+                      console.log(game);
+                    }}
+                    label="continue"
+                  />
+                </div>
+              )}
+              <Button onClick={() => setShowNew(true)} label="new game" />
+            </div>
             <button
-              className="btn btn-secondary"
-              onClick={() => setShowNew(true)}
+              className="mt-20 border border-black text-black bg-white font-bold  m-1 py-2 px-5  rounded-full hover:bg-black hover:text-white"
+              onClick={() =>
+                language === Language.en
+                  ? setLanguage(Language.pl)
+                  : setLanguage(Language.en)
+              }
             >
-              NEW GAME
+              {prettyLanguage[language]}
             </button>
           </div>
         )}
