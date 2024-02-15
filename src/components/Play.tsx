@@ -3,6 +3,7 @@ import { Game, Limb, Color, limbSvgs } from "../util/types";
 import { prettyPrint } from "../util/print";
 
 import Button from "./Button";
+import { useTranslation } from "react-i18next";
 
 interface PlayProps {
   game: Game;
@@ -15,6 +16,7 @@ const Play = ({ game, onClose }: PlayProps) => {
   const [score, setScore] = useState(-1);
   const [newHighscore, setNewHighscore] = useState(false);
 
+  const { t } = useTranslation();
   const roll = () => {
     setScore(score + 1);
     const color = game.colors[Math.floor(Math.random() * game.colors.length)];
@@ -42,13 +44,13 @@ const Play = ({ game, onClose }: PlayProps) => {
         <div className="w-full grow flex flex-col gap-4 justify-center items-center">
           <img src={limbSvgs[limb]} alt="SVG" className="w-48" />
 
-          <p className="text-3xl font-bold text-black">{prettyPrint[limb]}</p>
-          <p>on</p>
-          <p className="text-xl font-medium text-black">{color.name}</p>
+          <p className="text-3xl font-bold text-black">{t(prettyPrint[limb])}</p>
+          <p>{t("on")}</p>
+          <p className="text-xl font-medium text-black">{t(color.name)}</p>
         </div>
       </a>
       <div className="justify-self-end shrink py-8 w-full">
-        <Button onClick={fail} label="stop" />
+        <Button onClick={fail} label={t("stop")} />
       </div>
     </div>
   ) : (
@@ -62,8 +64,8 @@ const Play = ({ game, onClose }: PlayProps) => {
         highscore: {game.highscore}
       </p>
       <div className="flex flex-col items-center justify-center  gap-4 basis-1 grow">
-        <Button onClick={roll} label="start" />
-        <Button onClick={() => onClose(game)} label="end game" />
+        <Button onClick={roll} label={t("start")} />
+        <Button onClick={() => onClose(game)} label={t("end_game")} />
       </div>
       <div className="w-full basis-1/5">
         <div className="py-2 mx-5 flex gap-1 justify-center flex-wrap">

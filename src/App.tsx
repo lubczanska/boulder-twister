@@ -1,16 +1,40 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
-import { Color, Game, Language, Limb } from "./util/types";
-import { prettyLanguage } from "./util/print";
+import { Color, Game,  Limb } from "./util/types";
 import NewGame from "./components/NewGame";
 import Play from "./components/Play";
 import Button from "./components/Button";
+import { useTranslation } from "react-i18next";
+
+import i18n from "i18next";
+import { initReactI18next } from "react-i18next";
+import translationEN from "./locales/en/translation.json";
+import translationPL from "./locales/pl/translation.json";
+import LanguageSwitcher from "./components/LanguageSwitcher";
+
+const resources = {
+  en: {
+    translation: translationEN,
+  },
+  pl: {
+    translation: translationPL,
+  },
+};
+
+i18n.use(initReactI18next).init({
+  resources,
+  lng: "en",
+  fallbackLng: "en",
+  interpolation: {
+    escapeValue: false,
+  },
+});
 
 function App() {
   const [game, setGame] = useState<Game | null>(null);
   const [showNew, setShowNew] = useState(false);
   const [showPlay, setShowPlay] = useState(false);
-  const [language, setLanguage] = useState<Language>(Language.en);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const savedGame = localStorage.getItem("game");
@@ -67,24 +91,14 @@ function App() {
                   <Button
                     onClick={() => {
                       setShowPlay(true);
-                      console.log(game);
                     }}
-                    label="continue"
+                    label={t("continue")}
                   />
                 </div>
               )}
-              <Button onClick={() => setShowNew(true)} label="new game" />
+              <Button onClick={() => setShowNew(true)} label={t("new_game")} />
             </div>
-            <button
-              className="mt-20 border border-black text-black bg-white font-bold  m-1 py-2 px-5  rounded-full hover:bg-black hover:text-white"
-              onClick={() =>
-                language === Language.en
-                  ? setLanguage(Language.pl)
-                  : setLanguage(Language.en)
-              }
-            >
-              {prettyLanguage[language]}
-            </button>
+<LanguageSwitcher />
           </div>
         )}
       </main>

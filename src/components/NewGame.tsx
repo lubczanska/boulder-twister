@@ -2,8 +2,8 @@ import { useRef, useState } from "react";
 import { baseColors, Color, Limb, limbs, limbSvgs } from "../util/types";
 import { prettyPrint } from "../util/print";
 
-
 import Button from "./Button";
+import { useTranslation } from "react-i18next";
 
 interface NewGameProps {
   onSubmit: (colors: Color[], limbs: Limb[]) => void;
@@ -28,6 +28,7 @@ const NewGame = ({ onSubmit }: NewGameProps) => {
   const [selectedLimb, setSelectedLimb] = useState([true, true, true, true]);
   const [next, setNext] = useState(false);
 
+  const { t } = useTranslation();
   const addColorRef = useRef<HTMLDialogElement | null>(null);
 
   const handleCheck = (index: number, select: string) => {
@@ -76,14 +77,14 @@ const NewGame = ({ onSubmit }: NewGameProps) => {
               ✕
             </button>
             <div className="flex justify-between gap-2 items-center py-2">
-              <input id="name" className="border-none" placeholder="name" />
+              <input id="name" className="border-none" placeholder={t("name")} />
               <input
                 id="value"
                 type="color"
                 className="rounded-full w-8 h-8 border border-black"
               />
             </div>
-            <button type="submit"> add </button>
+            <button type="submit"> {t("add")} </button>
           </form>
         </div>
       </dialog>
@@ -98,7 +99,7 @@ const NewGame = ({ onSubmit }: NewGameProps) => {
           if (newLimbs.length) {
             onSubmit(newColors, newLimbs);
           } else {
-            setError("no limbs selected :(");
+            setError(t("no_libs_error"));
           }
         }}
       >
@@ -110,7 +111,7 @@ const NewGame = ({ onSubmit }: NewGameProps) => {
         {next ? (
           <div className="flex flex-col w-full h-full p-5 items-center gap-10">
             <label className="mx-auto w-2/3 pt-5 pb-2 text-xl font-semibold">
-              which limbs do you want to use?
+              {t("limb_picker_title")}
             </label>
             <div className="flex flex-wrap items-center justify-center gap-3 basis-1 grow">
               {limbs.map((limb, index) => (
@@ -124,8 +125,14 @@ const NewGame = ({ onSubmit }: NewGameProps) => {
                   }
                   onClick={() => handleCheck(index, "limb")}
                 >
-                  <p>{prettyPrint[limb]}</p>
-                  <img src={limbSvgs[limb]} alt="SVG" className={"w-20 " + (selectedLimb[index] ? "bg-white" : "")} />
+                  <p>{t(prettyPrint[limb])}</p>
+                  <img
+                    src={limbSvgs[limb]}
+                    alt="SVG"
+                    className={
+                      "w-20 " + (selectedLimb[index] ? "bg-white" : "")
+                    }
+                  />
                 </a>
               ))}
             </div>
@@ -134,14 +141,13 @@ const NewGame = ({ onSubmit }: NewGameProps) => {
               form="gameForm"
               className="border border-black text-black bg-white font-bold text-lg m-1 py-2 px-10 w-2/3 rounded-full hover:bg-black hover:text-white"
             >
-              {" "}
-              start{" "}
+              {t("start")}
             </button>
           </div>
         ) : (
           <div className="flex flex-col gap-3">
             <label className="mx-auto w-2/3 pt-5 pb-2 text-xl font-semibold">
-              what colors can you see on the wall?
+              {t("color_picker_title")}
             </label>
             {colors.map((color, index) => (
               <div
@@ -154,7 +160,7 @@ const NewGame = ({ onSubmit }: NewGameProps) => {
                   defaultChecked={selected[index]}
                   onChange={() => handleCheck(index, "color")}
                 />
-                <p>{color.name}</p>
+                <p>{t(color.name)}</p>
                 <div
                   className="w-6 h-6 border-black border rounded-full"
                   style={{ backgroundColor: color.value }}
@@ -167,7 +173,7 @@ const NewGame = ({ onSubmit }: NewGameProps) => {
                 onClick={() => {
                   if (addColorRef.current) addColorRef.current.showModal();
                 }}
-                label="add color"
+                label={t("add_color")}
               />
               <Button
                 type="button"
@@ -176,10 +182,10 @@ const NewGame = ({ onSubmit }: NewGameProps) => {
                     setError(null);
                     setNext(true);
                   } else {
-                    setError("no colors selected :(");
+                    setError(t("no_colors_error"));
                   }
                 }}
-                label="next"
+                label={t("next")}
               />
             </div>
           </div>
