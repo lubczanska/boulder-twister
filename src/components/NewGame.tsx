@@ -58,7 +58,7 @@ const NewGame = ({ onSubmit, onClose }: NewGameProps) => {
   };
 
   return (
-    <div className="w-full px-5 mx-auto  pt-10">
+    <div className="w-full px-5 mx-auto  pt-2">
       {/* modal */}
       <dialog
         id="show_color_modal"
@@ -125,13 +125,6 @@ const NewGame = ({ onSubmit, onClose }: NewGameProps) => {
         )}
         {next ? (
           <div className="flex flex-col w-full h-full p-5 items-center gap-10">
-            <button
-              type="button"
-              className="absolute left-10 top-10"
-              onClick={() => setNext(false)}
-            >
-              ✕
-            </button>
             <label className="mx-auto w-2/3 pt-5 pb-2 text-xl font-semibold">
               {t("limb_picker_title")}
             </label>
@@ -159,16 +152,16 @@ const NewGame = ({ onSubmit, onClose }: NewGameProps) => {
             >
               {t("start")}
             </button>
-          </div>
-        ) : (
-          <div className="flex flex-col gap-3 items-center">
             <button
               type="button"
-              className="absolute left-10 top-10"
-              onClick={onClose}
+              className="py-10 text-2xl"
+              onClick={() => setNext(false)}
             >
               ✕
             </button>
+          </div>
+        ) : (
+          <div className="flex flex-col gap-4 items-center">
             <label className="mx-auto w-2/3 pt-5 pb-2 text-xl font-semibold">
               {t("color_picker_title")}
             </label>
@@ -178,14 +171,14 @@ const NewGame = ({ onSubmit, onClose }: NewGameProps) => {
                 className="w-full px-10 flex justify-between items-center max-w-[400px]"
               >
                 <input
-                  className="w-6 h-6 text-black bg-white border-black rounded-full"
+                  className="w-10 h-10 text-black bg-white border-black rounded-full"
                   type="checkbox"
                   defaultChecked={selected[index]}
                   onChange={() => handleCheck(index, "color")}
                 />
                 <p>{t(color.name)}</p>
                 <div
-                  className="w-6 h-6 border-black border rounded-full"
+                  className="w-10 h-10 border-black border rounded-full"
                   style={{ backgroundColor: color.value }}
                 ></div>
               </div>
@@ -211,6 +204,9 @@ const NewGame = ({ onSubmit, onClose }: NewGameProps) => {
                 label={t("next")}
               />
             </div>
+            <button type="button" className="py-10 text-2xl" onClick={onClose}>
+              ✕
+            </button>
           </div>
         )}
       </form>

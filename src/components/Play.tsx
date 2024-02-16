@@ -48,7 +48,7 @@ const Play = ({ game, onClose }: PlayProps) => {
 
   return color && limb !== null ? (
     <div
-      className="w-full h-screen flex flex-col items-center"
+      className="w-full h-dvh flex flex-col items-center"
       style={{ backgroundColor: color.value }}
     >
       <a

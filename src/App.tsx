@@ -60,7 +60,7 @@ function App() {
 
   return (
     <React.Fragment>
-      <div className="h-screen">
+      <div className="h-dvh">
         {!showNew && !showPlay && (
           <header className="pt-40 pb-20 font-bold">
             <h1 className="text-6xl">boulder</h1>
