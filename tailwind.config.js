@@ -1,14 +1,14 @@
 import forms from "@tailwindcss/forms";
-
+import typography from "@tailwindcss/typography";
 /** @type {import('tailwindcss').Config} */
 
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     fontFamily: {
-      sans: ["Graphik", "sans-serif"],
+      sans: ["Poppins", "sans-serif"],
     },
     extend: {},
   },
-  plugins: [forms],
+  plugins: [forms, typography],
 };

@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Game, Limb, Color, limbSvgs } from "../util/types";
-import { prettyPrint } from "../util/print";
-
+import { prettyPrint } from "../util/types";
 import Button from "./Button";
 import { useTranslation } from "react-i18next";
+import { getLuma } from "../util/helper";
 
 interface PlayProps {
   game: Game;
@@ -15,11 +15,17 @@ const Play = ({ game, onClose }: PlayProps) => {
   const [limb, setLimb] = useState<Limb | null>(null);
   const [score, setScore] = useState(-1);
   const [newHighscore, setNewHighscore] = useState(false);
+  const [dark, setDark] = useState(false);
 
   const { t } = useTranslation();
+
   const roll = () => {
     setScore(score + 1);
     const color = game.colors[Math.floor(Math.random() * game.colors.length)];
+
+    if (getLuma(color.value) < 40) setDark(true);
+    else setDark(false);
+
     const limb = game.limbs[Math.floor(Math.random() * game.limbs.length)];
     setColor(color);
     setLimb(limb);
@@ -34,19 +40,29 @@ const Play = ({ game, onClose }: PlayProps) => {
     setColor(null);
     setLimb(null);
   };
+
+  const Icon = (limb: Limb, size: number) => {
+    const Icon = limbSvgs[limb];
+    return <Icon fill={dark ? "#ffffff" : "#000000"} size={"" + size} />;
+  };
+
   return color && limb !== null ? (
     <div
       className="w-full h-screen flex flex-col items-center"
       style={{ backgroundColor: color.value }}
     >
-      <a onClick={roll} className="w-full grow  flex flex-col">
-        <p className="text-6xl font-bold pt-20 text-black">{score}</p>
-        <div className="w-full grow flex flex-col gap-4 justify-center items-center">
-          <img src={limbSvgs[limb]} alt="SVG" className="w-48" />
-
-          <p className="text-3xl font-bold text-black">{t(prettyPrint[limb])}</p>
+      <a
+        onClick={roll}
+        className={
+          "w-full grow  flex flex-col " + (dark ? "text-white" : "text-black")
+        }
+      >
+        <p className="text-6xl font-bold pt-20">{score}</p>
+        <div className="w-full grow flex flex-col gap-4 justify-center items-center ">
+          {Icon(limb, 250)}
+          <p className="text-3xl font-bold">{t(prettyPrint[limb])}</p>
           <p>{t("on")}</p>
-          <p className="text-xl font-medium text-black">{t(color.name)}</p>
+          <p className={"text-xl font-medium "}>{t(color.name)}</p>
         </div>
       </a>
       <div className="justify-self-end shrink py-8 w-full">
@@ -63,7 +79,7 @@ const Play = ({ game, onClose }: PlayProps) => {
       >
         highscore: {game.highscore}
       </p>
-      <div className="flex flex-col items-center justify-center  gap-4 basis-1 grow">
+      <div className="flex flex-col items-center justify-center  gap-4 basis-1 grow ">
         <Button onClick={roll} label={t("start")} />
         <Button onClick={() => onClose(game)} label={t("end_game")} />
       </div>
@@ -78,9 +94,7 @@ const Play = ({ game, onClose }: PlayProps) => {
           ))}
         </div>
         <div className="py-2 flex gap-2 justify-center">
-          {game.limbs.map((l) => (
-            <img src={limbSvgs[l]} className="w-10" />
-          ))}
+          {game.limbs.map((l) => Icon(l, 40))}
         </div>
       </div>
     </div>

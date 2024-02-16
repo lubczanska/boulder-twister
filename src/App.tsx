@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
-import { Color, Game,  Limb } from "./util/types";
+import { Color, Game, Limb } from "./util/types";
 import NewGame from "./components/NewGame";
 import Play from "./components/Play";
 import Button from "./components/Button";
@@ -60,48 +60,54 @@ function App() {
 
   return (
     <React.Fragment>
-      {!showNew && !showPlay && (
-        <header className="py-40 text-4xl font-bold">
-          <h1 className="">boulder twister</h1>
-        </header>
-      )}
-      <main className="h-screen">
-        {showNew && (
-          <NewGame
-            onSubmit={onSubmit}
-            onClose={() => {
-              setShowNew(false);
-            }}
-          />
+      <div className="h-screen">
+        {!showNew && !showPlay && (
+          <header className="pt-40 pb-20 font-bold">
+            <h1 className="text-6xl">boulder</h1>
+            <h2 className="text-4xl">twister</h2>
+          </header>
         )}
-        {showPlay && game && (
-          <Play
-            game={game}
-            onClose={(game) => {
-              setShowPlay(false);
-              saveGame(game);
-            }}
-          />
-        )}
-        {!showPlay && !showNew && (
-          <div className="w-full  flex flex-col gap-4 items-center justify-center">
-            <div className="w-full basis-1 grow">
-              {game && (
-                <div className="w-full">
-                  <Button
-                    onClick={() => {
-                      setShowPlay(true);
-                    }}
-                    label={t("continue")}
-                  />
-                </div>
-              )}
-              <Button onClick={() => setShowNew(true)} label={t("new_game")} />
+        <main>
+          {showNew && (
+            <NewGame
+              onSubmit={onSubmit}
+              onClose={() => {
+                setShowNew(false);
+              }}
+            />
+          )}
+          {showPlay && game && (
+            <Play
+              game={game}
+              onClose={(game) => {
+                setShowPlay(false);
+                saveGame(game);
+              }}
+            />
+          )}
+          {!showPlay && !showNew && (
+            <div className="w-full  flex flex-col gap-4 items-center justify-center mx-auto lg:w-1/2">
+              <div className="w-full basis-1 grow">
+                {game && (
+                  <div className="w-full">
+                    <Button
+                      onClick={() => {
+                        setShowPlay(true);
+                      }}
+                      label={t("continue")}
+                    />
+                  </div>
+                )}
+                <Button
+                  onClick={() => setShowNew(true)}
+                  label={t("new_game")}
+                />
+              </div>
+              <LanguageSwitcher />
             </div>
-<LanguageSwitcher />
-          </div>
-        )}
-      </main>
+          )}
+        </main>
+      </div>
     </React.Fragment>
   );
 }

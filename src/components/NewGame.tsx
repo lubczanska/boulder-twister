@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { baseColors, Color, Limb, limbs, limbSvgs } from "../util/types";
-import { prettyPrint } from "../util/print";
+import { prettyPrint } from "../util/types";
 
 import Button from "./Button";
 import { useTranslation } from "react-i18next";
@@ -18,7 +18,7 @@ export interface AddColorFormElement extends HTMLFormElement {
   readonly elements: FormElements;
 }
 
-const NewGame = ({ onSubmit }: NewGameProps) => {
+const NewGame = ({ onSubmit, onClose }: NewGameProps) => {
   const [error, setError] = useState<string | null>(null);
   const [colors, setColors] =
     useState<{ name: string; value: string }[]>(baseColors);
@@ -52,11 +52,16 @@ const NewGame = ({ onSubmit }: NewGameProps) => {
     if (addColorRef.current) addColorRef.current.close();
   };
 
+  const Icon = (limb: Limb, size: number, fill: string) => {
+    const Icon = limbSvgs[limb];
+    return <Icon fill={fill} size={"" + size} />;
+  };
+
   return (
-    <div className="w-full px-5 mx-auto">
+    <div className="w-full px-5 mx-auto  pt-10">
       {/* modal */}
       <dialog
-        id="show_expense_modal"
+        id="show_color_modal"
         className="bg-white border border-black p-10 pb-5"
         ref={addColorRef}
       >
@@ -77,14 +82,24 @@ const NewGame = ({ onSubmit }: NewGameProps) => {
               ✕
             </button>
             <div className="flex justify-between gap-2 items-center py-2">
-              <input id="name" className="border-none" placeholder={t("name")} />
+              <input
+                id="name"
+                className="border-none max-w-40"
+                placeholder={t("name")}
+              />
               <input
                 id="value"
                 type="color"
                 className="rounded-full w-8 h-8 border border-black"
               />
             </div>
-            <button type="submit"> {t("add")} </button>
+            <button
+              className="border border-black px-5 py-1 rounded-full hover:bg-black hover:text-white"
+              type="submit"
+            >
+              {" "}
+              {t("add")}{" "}
+            </button>
           </form>
         </div>
       </dialog>
@@ -99,7 +114,7 @@ const NewGame = ({ onSubmit }: NewGameProps) => {
           if (newLimbs.length) {
             onSubmit(newColors, newLimbs);
           } else {
-            setError(t("no_libs_error"));
+            setError(t("no_limbs_error"));
           }
         }}
       >
@@ -110,6 +125,13 @@ const NewGame = ({ onSubmit }: NewGameProps) => {
         )}
         {next ? (
           <div className="flex flex-col w-full h-full p-5 items-center gap-10">
+            <button
+              type="button"
+              className="absolute left-10 top-10"
+              onClick={() => setNext(false)}
+            >
+              ✕
+            </button>
             <label className="mx-auto w-2/3 pt-5 pb-2 text-xl font-semibold">
               {t("limb_picker_title")}
             </label>
@@ -121,18 +143,12 @@ const NewGame = ({ onSubmit }: NewGameProps) => {
                     "basis-1/3 grow border border-black  py-5 font-bold h-1/2 flex flex-col items-center justify-center gap-10 " +
                     (selectedLimb[index]
                       ? " bg-black text-white"
-                      : " bg-white text-black hover:bg-black hover:text-white")
+                      : " bg-white text-black hover:bg-yellow-400 ")
                   }
                   onClick={() => handleCheck(index, "limb")}
                 >
                   <p>{t(prettyPrint[limb])}</p>
-                  <img
-                    src={limbSvgs[limb]}
-                    alt="SVG"
-                    className={
-                      "w-20 " + (selectedLimb[index] ? "bg-white" : "")
-                    }
-                  />
+                  {Icon(limb, 100, selectedLimb[index] ? "#ffffff" : "#000000")}
                 </a>
               ))}
             </div>
@@ -145,14 +161,21 @@ const NewGame = ({ onSubmit }: NewGameProps) => {
             </button>
           </div>
         ) : (
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-3 items-center">
+            <button
+              type="button"
+              className="absolute left-10 top-10"
+              onClick={onClose}
+            >
+              ✕
+            </button>
             <label className="mx-auto w-2/3 pt-5 pb-2 text-xl font-semibold">
               {t("color_picker_title")}
             </label>
             {colors.map((color, index) => (
               <div
                 key={index}
-                className="px-10 flex justify-between items-center"
+                className="w-full px-10 flex justify-between items-center max-w-[400px]"
               >
                 <input
                   className="w-6 h-6 text-black bg-white border-black rounded-full"
