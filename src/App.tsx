@@ -60,7 +60,7 @@ function App() {
 
   return (
     <React.Fragment>
-      <div className="">
+      <div className={!showNew && !showPlay ? "w-dvh" : ""}>
         {!showNew && !showPlay && (
           <header className="pt-20 pb-20 font-bold">
             <h1 className="text-6xl">boulder</h1>

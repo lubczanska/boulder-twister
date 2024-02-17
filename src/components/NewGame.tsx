@@ -118,13 +118,8 @@ const NewGame = ({ onSubmit, onClose }: NewGameProps) => {
           }
         }}
       >
-        {error && (
-          <div className="pt-4">
-            <p className="mx-auto bg-red-400 font-bold w-fit px-1">{error}</p>
-          </div>
-        )}
         {next ? (
-          <div className="flex flex-col w-full h-full p-5 items-center gap-10">
+          <div className="flex flex-col w-full p-5 items-center gap-10">
             <label className="mx-auto w-2/3 pt-5 pb-2 text-xl font-semibold">
               {t("limb_picker_title")}
             </label>
@@ -141,7 +136,7 @@ const NewGame = ({ onSubmit, onClose }: NewGameProps) => {
                   onClick={() => handleCheck(index, "limb")}
                 >
                   <p>{t(prettyPrint[limb])}</p>
-                  {Icon(limb, 100, selectedLimb[index] ? "#ffffff" : "#000000")}
+                  {Icon(limb, 80, selectedLimb[index] ? "#ffffff" : "#000000")}
                 </a>
               ))}
             </div>
@@ -152,6 +147,13 @@ const NewGame = ({ onSubmit, onClose }: NewGameProps) => {
             >
               {t("start")}
             </button>
+            {error && (
+              <div className="pt-4">
+                <p className="mx-auto bg-red-400 font-bold w-fit px-1">
+                  {error}
+                </p>
+              </div>
+            )}
             <button
               type="button"
               className="py-10 text-2xl"
@@ -203,6 +205,13 @@ const NewGame = ({ onSubmit, onClose }: NewGameProps) => {
                 }}
                 label={t("next")}
               />
+              {error && (
+                <div className="pt-4">
+                  <p className="mx-auto bg-red-400 font-bold w-fit px-1">
+                    {error}
+                  </p>
+                </div>
+              )}
             </div>
             <button type="button" className="py-10 text-2xl" onClick={onClose}>
               ✕
