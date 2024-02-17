@@ -48,7 +48,7 @@ function App() {
     localStorage.setItem("game", JSON.stringify(newGame));
   };
 
-  const onSubmit = async (colors: Color[], limbs: Limb[]) => {
+  const onNewGameSubmit = async (colors: Color[], limbs: Limb[]) => {
     await setGame({ colors: colors, limbs: limbs, highscore: 0 });
     setShowNew(false);
     if (game) {
@@ -70,7 +70,7 @@ function App() {
         <main>
           {showNew && (
             <NewGame
-              onSubmit={onSubmit}
+              onSubmit={onNewGameSubmit}
               onClose={() => {
                 setShowNew(false);
               }}
@@ -79,10 +79,10 @@ function App() {
           {showPlay && game && (
             <Play
               game={game}
-              onClose={(game) => {
-                setShowPlay(false);
+              saveGame={(game) => {
                 saveGame(game);
               }}
+              onClose={() => setShowPlay(false)}
             />
           )}
           {!showPlay && !showNew && (

@@ -7,10 +7,11 @@ import { getLuma } from "../util/helper";
 
 interface PlayProps {
   game: Game;
-  onClose: (game: Game) => void;
+  saveGame: (game: Game) => void;
+  onClose: () => void;
 }
 
-const Play = ({ game, onClose }: PlayProps) => {
+const Play = ({ game, saveGame, onClose }: PlayProps) => {
   const [color, setColor] = useState<Color | null>(null);
   const [limb, setLimb] = useState<Limb | null>(null);
   const [score, setScore] = useState(-1);
@@ -36,9 +37,11 @@ const Play = ({ game, onClose }: PlayProps) => {
       game.highscore = score;
       setNewHighscore(true);
     } else setNewHighscore(false);
+    setDark(false);
     setScore(-1);
     setColor(null);
     setLimb(null);
+    saveGame(game);
   };
 
   const Icon = (limb: Limb, size: number) => {
@@ -57,7 +60,7 @@ const Play = ({ game, onClose }: PlayProps) => {
           "w-full grow  flex flex-col " + (dark ? "text-white" : "text-black")
         }
       >
-        <p className="text-6xl font-bold pt-2 lg:pt-10">{score}</p>
+        <p className="text-6xl font-bold pt-5 lg:pt-10">{score}</p>
         <div className="w-full grow flex flex-col gap-4 justify-center items-center ">
           {Icon(limb, 200)}
           <p className="text-3xl font-bold">{t(prettyPrint[limb])}</p>
@@ -81,7 +84,13 @@ const Play = ({ game, onClose }: PlayProps) => {
       </p>
       <div className="flex flex-col items-center justify-center  gap-4 basis-1/2 grow ">
         <Button onClick={roll} label={t("start")} />
-        <Button onClick={() => onClose(game)} label={t("end_game")} />
+        <Button
+          onClick={() => {
+            onClose();
+            saveGame(game);
+          }}
+          label={t("end_game")}
+        />
       </div>
       <div className="w-full basis-1/5">
         <div className="py-2 mx-5 flex gap-1 justify-center flex-wrap">

@@ -1,7 +1,7 @@
-import LeftFoot from "../assets/left_foot.tsx";
-import RightFoot from "./../assets/right_foot.tsx";
-import LeftHand from "./../assets/left_hand.tsx";
-import RightHand from "./../assets/right_hand.tsx";
+import LeftFoot from "../components/LeftFoot.tsx";
+import RightFoot from "../components/RightFoot.tsx";
+import LeftHand from "../components/LeftHand.tsx";
+import RightHand from "../components/RightHand.tsx";
 
 export interface Color {
   name: string;

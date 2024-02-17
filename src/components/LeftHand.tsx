@@ -1,4 +1,4 @@
-import { svgProps } from "./svgProps";
+import { svgProps } from "../svgProps";
 
 const LeftHand = ({ fill, size }: svgProps) => (
   <svg

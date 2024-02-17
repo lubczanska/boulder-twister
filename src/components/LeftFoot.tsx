@@ -1,4 +1,4 @@
-import { svgProps } from "./svgProps";
+import { svgProps } from "../svgProps";
 
 const LeftFoot = ({ fill, size }: svgProps) => (
   <svg
