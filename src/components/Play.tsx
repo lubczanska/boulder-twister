@@ -57,9 +57,9 @@ const Play = ({ game, onClose }: PlayProps) => {
           "w-full grow  flex flex-col " + (dark ? "text-white" : "text-black")
         }
       >
-        <p className="text-6xl font-bold pt-2">{score}</p>
+        <p className="text-6xl font-bold pt-2 lg:pt-10">{score}</p>
         <div className="w-full grow flex flex-col gap-4 justify-center items-center ">
-          {Icon(limb, 250)}
+          {Icon(limb, 200)}
           <p className="text-3xl font-bold">{t(prettyPrint[limb])}</p>
           <p>{t("on")}</p>
           <p className={"text-xl font-medium "}>{t(color.name)}</p>
