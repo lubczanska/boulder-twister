@@ -57,7 +57,7 @@ const Play = ({ game, onClose }: PlayProps) => {
           "w-full grow  flex flex-col " + (dark ? "text-white" : "text-black")
         }
       >
-        <p className="text-6xl font-bold pt-10">{score}</p>
+        <p className="text-6xl font-bold pt-2">{score}</p>
         <div className="w-full grow flex flex-col gap-4 justify-center items-center ">
           {Icon(limb, 250)}
           <p className="text-3xl font-bold">{t(prettyPrint[limb])}</p>
@@ -70,7 +70,7 @@ const Play = ({ game, onClose }: PlayProps) => {
       </div>
     </div>
   ) : (
-    <div className="w-full h-dvh flex flex-col py-10 gap-4">
+    <div className="w-full h-dvh flex flex-col py-2 gap-4">
       <p
         className={
           "mt-10 mx-auto font-bold text-xl w-fit px-1 " +
@@ -79,7 +79,7 @@ const Play = ({ game, onClose }: PlayProps) => {
       >
         highscore: {game.highscore}
       </p>
-      <div className="flex flex-col items-center justify-center  gap-4 basis-1 grow ">
+      <div className="flex flex-col items-center justify-center  gap-4 basis-1/2 grow ">
         <Button onClick={roll} label={t("start")} />
         <Button onClick={() => onClose(game)} label={t("end_game")} />
       </div>

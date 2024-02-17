@@ -84,13 +84,13 @@ const NewGame = ({ onSubmit, onClose }: NewGameProps) => {
             <div className="flex justify-between gap-2 items-center py-2">
               <input
                 id="name"
-                className="border-none max-w-40"
+                className="border-none max-w-60"
                 placeholder={t("name")}
               />
               <input
                 id="value"
                 type="color"
-                className="rounded-full w-8 h-8 border border-black"
+                className="rounded-full w-10 h-10 border border-black"
               />
             </div>
             <button
