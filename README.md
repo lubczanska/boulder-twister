@@ -15,10 +15,10 @@ You can also play the game in polish
 
 Try it yourself: https://boulder-twister.vercel.app/
 
-or
+or clone the repo and
 
 ```
-
+npm i
 ```
 ---
 
