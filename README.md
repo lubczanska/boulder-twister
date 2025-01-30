@@ -1,30 +1,50 @@
 # Bouldering Twister
 
-Web app for playing twister on a bouldering wall build with Typescript and React
+Web app for playing twister on a bouldering wall built with Typescript and React
 
-Pick hold colors and limbs that you want to use and start climbing!
-When in game mode click on the screen to roll the next limb-color combo.
+Try the live version yourself at https://boulder-twister.vercel.app/
 
-You can also play the game in polish
 
+## Description
+
+This app lets you play the popular party game Twister on a bouldering wall. Simply choose a spot on the wall, pick the colors you want too use (you can add your own colors if you want), choose if you want to play with all your limbs or not (you can try an easier version where you place your legs wherever you want) and start playing. To roll the next limb-color combo you just have to tap the screen and when you fall down - click stop and let the next person play.
+
+<p float="left">
 <img src="https://raw.githubusercontent.com/lubczanska/boulder-twister/main/public/pick_limb.png" alt="color picker screen" width="200" />
 <img src="https://raw.githubusercontent.com/lubczanska/boulder-twister/main/public/pick_color.png" alt="limb picker screen" width="200" />
 <img src="https://raw.githubusercontent.com/lubczanska/boulder-twister/main/public/play.png" alt="gameplay" width="200" />
+</p>
 
----
+## Features
 
-Try it yourself: https://boulder-twister.vercel.app/
+### Current
 
-or clone the repo and
+- tracking highscore
+- polish language option
+
+### Coming soon
+
+- tracking time spent on the wall
+- automatic rolling and voice control
+
+
+
+## Installation and usage
+
+You can use the live version hosted on Vercel (linked above).
+
+To host the app locally make sure you have node with npm installed, clone the repo and inside the project folder run
 
 ```
 npm i
+npm run dev
 ```
----
 
-### Technologies used
+
+
+## Built with
 - Node.js
-- Typescript
 - React
+- Typescript
 - TailwindCSS
-- i18next (for localization)
+- i18next (localization)
